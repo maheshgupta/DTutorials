@@ -6,6 +6,7 @@ import android.support.annotation.Nullable;
 
 public abstract class BaseActivity extends CoreModule {
 
+
     protected final String TAG = getLogTag();
 
     public abstract int getContentViewID();
@@ -17,6 +18,5 @@ public abstract class BaseActivity extends CoreModule {
         super.onCreate(savedInstanceState);
         setContentView(getContentViewID());
     }
-
 
 }

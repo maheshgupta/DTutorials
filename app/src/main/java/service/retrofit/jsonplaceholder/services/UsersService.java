@@ -1,4 +1,4 @@
-package service.retrofit.jsonplaceholder;
+package service.retrofit.jsonplaceholder.services;
 
 
 import java.util.List;
