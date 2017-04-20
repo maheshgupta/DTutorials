@@ -11,6 +11,13 @@ import framework.DemoApplication;
 import service.retrofit.jsonplaceholder.wrapper.UsersServiceWrapper;
 
 
+/**
+ * Class, that provides the list of Inject modules from Dagger2 Injection Service.
+ * This has the full list of Inject items and their getters so that sub-modules
+ * can easily fetch the injected modules. This is made because Dagger2 does not provide
+ * the injected modules to sub-classes.
+ */
+
 public class RetrofitActivityModule extends AppCompatActivity {
 
     @Inject
@@ -30,12 +37,21 @@ public class RetrofitActivityModule extends AppCompatActivity {
         ((DemoApplication) getApplication()).getApplicationComponent().inject(this);
     }
 
-
-
-    public SharedPreferences getSharedPreferencesModule(){
+    /**
+     * Get a copy of the Shared Preferences.
+     *
+     * @return
+     */
+    public SharedPreferences getSharedPreferencesModule() {
         return this.sharedPreferences;
     }
 
+
+    /**
+     * Get the Copy of the Users Services Wrapper to connect REST Api.
+     *
+     * @return
+     */
     public UsersServiceWrapper getUserServiceWrapper() {
         return this.usersServiceWrapper;
     }
