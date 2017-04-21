@@ -1,17 +1,11 @@
 package framework.core;
 
+import android.app.ProgressDialog;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.support.v7.app.AppCompatActivity;
 import android.widget.Toast;
-
-import javax.inject.Inject;
-
-import framework.DemoApplication;
-import retrofit2.Retrofit;
-import service.retrofit.jsonplaceholder.wrapper.UsersServiceWrapper;
 
 
 /**
@@ -20,6 +14,8 @@ import service.retrofit.jsonplaceholder.wrapper.UsersServiceWrapper;
  */
 
 public class CoreModule extends RetrofitActivityModule {
+
+    private ProgressDialog progressDialog;
 
 
     @Override
@@ -59,4 +55,35 @@ public class CoreModule extends RetrofitActivityModule {
         Toast.makeText(this, pMessage, Toast.LENGTH_LONG).show();
     }
 
+    /**
+     * Show the progress dialog
+     *
+     * @param message
+     */
+    protected void showProgessDialog(@NonNull String message) {
+        if (this.progressDialog == null) {
+            progressDialog = new ProgressDialog(this);
+            progressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+            progressDialog.setIndeterminate(true);
+        }
+        dismissProgressDialog();
+        progressDialog.setMessage(message);
+        progressDialog.show();
+    }
+
+
+    /**
+     * Dismiss the progress dialog.
+     */
+    protected void dismissProgressDialog() {
+        if (this.progressDialog != null && this.progressDialog.isShowing()) {
+            this.progressDialog.dismiss();
+        }
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        dismissProgressDialog();
+    }
 }

@@ -1,18 +1,41 @@
 package model.service.jsonplaceholder.photo;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 /**
  * Model for Photo item
  * {
- *  "albumId": 1,
- *  "id": 1,
- *  "title": "accusamus beatae ad facilis cum similique qui sunt",
- *  "url": "http://placehold.it/600/92c952",
- *  "thumbnailUrl": "http://placehold.it/150/92c952"
+ * "albumId": 1,
+ * "id": 1,
+ * "title": "accusamus beatae ad facilis cum similique qui sunt",
+ * "url": "http://placehold.it/600/92c952",
+ * "thumbnailUrl": "http://placehold.it/150/92c952"
  * }
  */
-public class Photo {
+public class Photo implements Parcelable {
 
     private int albumId;
+
+    protected Photo(Parcel in) {
+        albumId = in.readInt();
+        id = in.readInt();
+        title = in.readString();
+        url = in.readString();
+        thumbnailUrl = in.readString();
+    }
+
+    public static final Creator<Photo> CREATOR = new Creator<Photo>() {
+        @Override
+        public Photo createFromParcel(Parcel in) {
+            return new Photo(in);
+        }
+
+        @Override
+        public Photo[] newArray(int size) {
+            return new Photo[size];
+        }
+    };
 
     public int getAlbumId() {
         return this.albumId;
@@ -60,5 +83,19 @@ public class Photo {
 
     public void setThumbnailUrl(String thumbnailUrl) {
         this.thumbnailUrl = thumbnailUrl;
+    }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeInt(albumId);
+        dest.writeInt(id);
+        dest.writeString(title);
+        dest.writeString(url);
+        dest.writeString(thumbnailUrl);
     }
 }
