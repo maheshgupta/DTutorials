@@ -4,6 +4,8 @@ package framework.core;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 
+import butterknife.ButterKnife;
+
 public abstract class BaseActivity extends CoreModule {
 
 
@@ -17,6 +19,7 @@ public abstract class BaseActivity extends CoreModule {
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(getContentViewID());
+        ButterKnife.bind(this);
     }
 
 }

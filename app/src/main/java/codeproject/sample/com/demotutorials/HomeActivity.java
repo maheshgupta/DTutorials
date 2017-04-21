@@ -1,22 +1,17 @@
 package codeproject.sample.com.demotutorials;
 
-import android.support.annotation.Nullable;
+import android.content.Intent;
 import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.util.Log;
+import android.view.View;
 
 import java.util.List;
-
-import javax.inject.Inject;
 
 import framework.DemoApplication;
 import framework.core.BaseActivity;
 import model.service.jsonplaceholder.user.User;
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
 import service.core.ServiceResponseListener;
-import service.retrofit.jsonplaceholder.services.UsersService;
-import service.retrofit.jsonplaceholder.wrapper.UsersServiceWrapper;
 
 public class HomeActivity extends BaseActivity {
 
@@ -36,6 +31,10 @@ public class HomeActivity extends BaseActivity {
         ((DemoApplication) getApplication()).getApplicationComponent().inject(this);
     }
 
+    public void showAlbumsActivity(View view) {
+        Intent intent = new Intent(this, AlbumsActivity.class);
+        startActivity(intent);
+    }
 
     private void test() {
         if (getUserServiceWrapper() != null) {

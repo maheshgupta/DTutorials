@@ -8,6 +8,7 @@ import android.support.v7.app.AppCompatActivity;
 import javax.inject.Inject;
 
 import framework.DemoApplication;
+import service.retrofit.jsonplaceholder.wrapper.PhotosServiceWrapper;
 import service.retrofit.jsonplaceholder.wrapper.UsersServiceWrapper;
 
 
@@ -25,6 +26,9 @@ public class RetrofitActivityModule extends AppCompatActivity {
 
     @Inject
     UsersServiceWrapper usersServiceWrapper;
+
+    @Inject
+    PhotosServiceWrapper photosServiceWrapper;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -54,6 +58,11 @@ public class RetrofitActivityModule extends AppCompatActivity {
      */
     public UsersServiceWrapper getUserServiceWrapper() {
         return this.usersServiceWrapper;
+    }
+
+
+    public PhotosServiceWrapper getPhotosServiceWrapper() {
+        return this.photosServiceWrapper;
     }
 
 }
