@@ -8,7 +8,8 @@
     <ImageView
         android:id="@+id/image_album"
         android:layout_width="40dp"
-        android:layout_height="40dp" />
+        android:layout_height="40dp"
+        android:transitionName="@string/tr_profile_photo" />
 
     <TextView
         android:id="@+id/txtview_albumname"

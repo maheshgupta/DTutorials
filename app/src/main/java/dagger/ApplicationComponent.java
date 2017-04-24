@@ -1,10 +1,9 @@
 package dagger;
 
 
-import codeproject.sample.com.demotutorials.HomeActivity;
+import codeproject.sample.com.demotutorials.AlbumsActivity;
 import dagger.modules.AppModule;
 import dagger.modules.NetworkModule;
-import framework.core.CoreModule;
 import framework.core.RetrofitActivityModule;
 import service.core.AppApiService;
 
@@ -17,5 +16,5 @@ public interface ApplicationComponent {
 
     void inject(AppApiService appApiService);
 
-//    void inject(HomeActivity activity);
+    void inject(AlbumsActivity activity);
 }

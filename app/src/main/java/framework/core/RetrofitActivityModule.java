@@ -7,6 +7,7 @@ import android.support.v7.app.AppCompatActivity;
 
 import javax.inject.Inject;
 
+import dagger.ApplicationComponent;
 import framework.DemoApplication;
 import service.retrofit.jsonplaceholder.wrapper.PhotosServiceWrapper;
 import service.retrofit.jsonplaceholder.wrapper.UsersServiceWrapper;
@@ -36,9 +37,13 @@ public class RetrofitActivityModule extends AppCompatActivity {
         this.addInjections();
     }
 
+    protected ApplicationComponent getApplicationComponent() {
+        return ((DemoApplication) getApplication()).getApplicationComponent();
+    }
+
 
     private void addInjections() {
-        ((DemoApplication) getApplication()).getApplicationComponent().inject(this);
+        getApplicationComponent().inject(this);
     }
 
     /**

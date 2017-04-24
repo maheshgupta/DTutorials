@@ -2,26 +2,32 @@ package codeproject.sample.com.demotutorials;
 
 import android.content.Context;
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.v4.app.ActivityOptionsCompat;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.View;
+import android.widget.ImageView;
 
 import java.util.List;
 
 import butterknife.BindView;
 import codeproject.sample.com.demotutorials.adapter.PhotosAdapter;
+import codeproject.sample.com.demotutorials.presenters.albums.AlbumsView;
+import codeproject.sample.com.demotutorials.presenters.albums.AlbumsViewPresenter;
 import framework.core.BaseActivity;
 import model.service.jsonplaceholder.photo.Photo;
 import service.core.ServiceResponseListener;
 import viewhelpers.RecyclerViewItemClickListener;
 
 
-public class AlbumsActivity extends BaseActivity {
+public class AlbumsActivity extends BaseActivity implements AlbumsView{
+
 
     @BindView(R.id.rv_albums)
     RecyclerView recyclerViewAlbums;
@@ -29,6 +35,9 @@ public class AlbumsActivity extends BaseActivity {
     private PhotosAdapter photosAdapter;
     private GridLayoutManager layoutManager;
     private List<Photo> photosList;
+
+    //    @Inject
+    AlbumsViewPresenter albumsViewPresenter;
 
     @Override
     public int getContentViewID() {
@@ -43,6 +52,12 @@ public class AlbumsActivity extends BaseActivity {
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        albumsViewPresenter = new AlbumsViewPresenter(this);
+
+        /*Dagger2 Injection*/
+//        getApplicationComponent().inject(this);
+
         showProgessDialog(getString(R.string.pleaseWait));
         this.pullPhotos();
         this.recyclerViewAlbums.addOnItemTouchListener(getRecyclerViewItemClickListener());
@@ -62,9 +77,16 @@ public class AlbumsActivity extends BaseActivity {
         this.recyclerViewAlbums.setAdapter(adapter);
     }
 
-    private void openDetailOfPhoto(@NonNull Photo photo) {
-        Intent intent = new Intent(AlbumsActivity.this, PhotoDetailViewActivity.class);
-        startActivity(intent);
+    private void openDetailOfPhoto(@NonNull View view, @NonNull Photo photo) {
+        Intent intent = PhotoDetailViewActivity.makeIntent(this, photo);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            ImageView photoImageView = (ImageView) view.findViewById(R.id.image_photo);
+            ActivityOptionsCompat options = ActivityOptionsCompat.
+                    makeSceneTransitionAnimation(AlbumsActivity.this, photoImageView, getString(R.string.tr_profile_photo));
+            startActivity(intent, options.toBundle());
+        } else {
+            startActivity(intent);
+        }
     }
 
 
@@ -99,7 +121,7 @@ public class AlbumsActivity extends BaseActivity {
             @Override
             public void onItemClick(View view, int position) {
                 if (photosList != null && photosList.get(position) != null) {
-                    openDetailOfPhoto(photosList.get(position));
+                    openDetailOfPhoto(view, photosList.get(position));
                 }
             }
         });
