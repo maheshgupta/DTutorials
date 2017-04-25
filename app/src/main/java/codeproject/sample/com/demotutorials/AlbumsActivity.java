@@ -16,21 +16,35 @@ import android.widget.ImageView;
 
 import java.util.List;
 
+import javax.inject.Inject;
+
 import butterknife.BindView;
 import codeproject.sample.com.demotutorials.adapter.PhotosAdapter;
 import codeproject.sample.com.demotutorials.presenters.albums.AlbumsView;
 import codeproject.sample.com.demotutorials.presenters.albums.AlbumsViewPresenter;
 import framework.core.BaseActivity;
+import io.reactivex.Observable;
+import io.reactivex.Scheduler;
+import io.reactivex.disposables.Disposable;
+import io.reactivex.observers.DisposableObserver;
 import model.service.jsonplaceholder.photo.Photo;
+import retrofit2.Retrofit;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.schedulers.Schedulers;
+
 import service.core.ServiceResponseListener;
+import service.retrofit.jsonplaceholder.services.PhotosService;
 import viewhelpers.RecyclerViewItemClickListener;
 
 
-public class AlbumsActivity extends BaseActivity implements AlbumsView{
+public class AlbumsActivity extends BaseActivity implements AlbumsView {
 
 
     @BindView(R.id.rv_albums)
     RecyclerView recyclerViewAlbums;
+
+    @Inject
+    Retrofit retrofit;
 
     private PhotosAdapter photosAdapter;
     private GridLayoutManager layoutManager;
@@ -38,6 +52,7 @@ public class AlbumsActivity extends BaseActivity implements AlbumsView{
 
     //    @Inject
     AlbumsViewPresenter albumsViewPresenter;
+    private DisposableObserver<List<Photo>> disposable;
 
     @Override
     public int getContentViewID() {
@@ -56,10 +71,11 @@ public class AlbumsActivity extends BaseActivity implements AlbumsView{
         albumsViewPresenter = new AlbumsViewPresenter(this);
 
         /*Dagger2 Injection*/
-//        getApplicationComponent().inject(this);
+        getApplicationComponent().inject(this);
 
         showProgessDialog(getString(R.string.pleaseWait));
-        this.pullPhotos();
+//        this.pullPhotos();
+        getBooksFromService();
         this.recyclerViewAlbums.addOnItemTouchListener(getRecyclerViewItemClickListener());
     }
 
@@ -125,6 +141,36 @@ public class AlbumsActivity extends BaseActivity implements AlbumsView{
                 }
             }
         });
+    }
+
+
+    private void getBooksFromService() {
+        if (retrofit != null) {
+            PhotosService call = retrofit.create(PhotosService.class);
+            Observable<List<Photo>> subscriber = call.getPhotosListByAlbumId(1).subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread());
+            disposable = subscriber.subscribeWith(new DisposableObserver<List<Photo>>() {
+                @Override
+                public void onNext(List<Photo> value) {
+                    for (Photo eachPhoto : value) {
+                        Log.i(TAG, "onNext: Value is " + eachPhoto.toString());
+                    }
+                }
+
+                @Override
+                public void onError(Throwable e) {
+                    Log.e(TAG, "onError: " + e.getMessage(), e);
+                    dismissProgressDialog();
+                }
+
+                @Override
+                public void onComplete() {
+                    Log.i(TAG, "onComplete: ");
+                    dismissProgressDialog();
+                }
+            });
+        } else {
+            Log.e(TAG, "getBooksFromService: " + "Retrofit service is not available");
+        }
     }
 
 }

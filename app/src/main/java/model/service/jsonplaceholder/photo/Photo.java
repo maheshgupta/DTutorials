@@ -98,4 +98,9 @@ public class Photo implements Parcelable {
         dest.writeString(url);
         dest.writeString(thumbnailUrl);
     }
+
+    @Override
+    public String toString() {
+        return String.format("AlbumID : %d\nID : %d\nTitle : %s\nUrl : %s\n", getAlbumId(), getId(), getTitle(), getThumbnailUrl());
+    }
 }

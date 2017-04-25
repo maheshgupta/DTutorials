@@ -18,6 +18,9 @@ android {
         versionName "1.0"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
+    packagingOptions {
+        exclude 'META-INF/rxjava.properties'
+    }
     buildTypes {
         release {
             minifyEnabled false
@@ -35,17 +38,20 @@ dependencies {
     compile "com.android.support:design:$appCompatVersion"
     compile 'com.android.support.constraint:constraint-layout:1.0.2'
     testCompile 'junit:junit:4.12'
-    /*Dagger Dependencies*/
 
+
+    /*Dagger Dependencies*/
     compile "com.google.dagger:dagger:$daggerVersion"
     annotationProcessor "com.google.dagger:dagger-compiler:$daggerVersion"
 
     /*Retrofit*/
     compile "com.squareup.retrofit2:retrofit:$retrofitVersion"
     compile "com.squareup.retrofit2:converter-gson:$retrofitVersion"
+    compile "com.squareup.retrofit2:adapter-rxjava2:$retrofitVersion"
 
     /*RxJava2*/
-    compile 'io.reactivex.rxjava2:rxandroid:2.0.1'
+    compile 'io.reactivex.rxjava2:rxjava:2.0.0'
+    compile 'io.reactivex.rxjava2:rxandroid:2.0.0'
 
     /*Butter Knife, for View bindings*/
     compile "com.jakewharton:butterknife:$butterKnifeVersion"

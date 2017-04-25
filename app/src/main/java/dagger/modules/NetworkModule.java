@@ -8,7 +8,9 @@ import javax.inject.Singleton;
 import constants.AppConstants;
 import dagger.Module;
 import dagger.Provides;
+import okhttp3.OkHttpClient;
 import retrofit2.Retrofit;
+import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory;
 import retrofit2.converter.gson.GsonConverterFactory;
 import service.retrofit.jsonplaceholder.wrapper.PhotosServiceWrapper;
 import service.retrofit.jsonplaceholder.wrapper.UsersServiceWrapper;
@@ -17,10 +19,17 @@ import service.retrofit.jsonplaceholder.wrapper.UsersServiceWrapper;
 public class NetworkModule {
 
     @Provides
-    public Retrofit providesRetrofit() {
+    public OkHttpClient provideOkHttpClient() {
+        return new OkHttpClient.Builder().build();
+    }
+
+    @Provides
+    public Retrofit providesRetrofit(OkHttpClient okHttpClient) {
         Retrofit retrofit = new Retrofit.Builder()
                 .baseUrl(AppConstants.JSON_PLACEHOLDER_SERVER_BASEURL)
                 .addConverterFactory(GsonConverterFactory.create())
+                .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
+                .client(okHttpClient)
                 .build();
         return retrofit;
     }

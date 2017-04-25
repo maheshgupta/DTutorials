@@ -13,4 +13,13 @@ public class AlbumsViewPresenter {
     }
 
 
+    @Test
+    public void shouldPassPullAlbumList() {
+
+    }
+
+
+
+
+
 }
